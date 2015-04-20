@@ -42,11 +42,6 @@ $headers = array (
 $data = Array (
     'firstName' => 'Michael',
     'lastName' => 'Smith',
-    'jobTitle' => 'President',
-    'department' => 'Sales',
-    'officePhone' => '653-235-7824',
-    'mobilePhone' => '653-235-7821',
-    'officeFax' => '653-235-7834',
     'description' => 'Some desc.',
     'website' => 'http://sample.com',
     'state' => Array (
@@ -57,6 +52,10 @@ $data = Array (
             'optOut' => 1,
         )
 );
+
+$wholedata = array('data' => $data);
+
+print_r($wholedata)
 
 $response = ApiRestHelper::createApiCall('http://bd.techatnyu.org/app/index.php/leads/contact/api/create/', 'POST', $headers, array('data' => $data));
 $response = json_decode($response, true);

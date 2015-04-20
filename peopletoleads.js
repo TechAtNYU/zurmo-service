@@ -6,36 +6,33 @@ var ZURMO_token = '';
 var peopleToLeads = function(person){
   var lead = {
     'data': {
-      'items': {
-        'api_idCstm': person.id,
-        'description': person.notes || '',
-        'firstName': '',
-        'lastName': '',
-        'state': {
-          'id': 2
-        },
-        'mobilePhone': person.contact && person.contact.phone || '',
-        'website': person.url || '',
-        'primaryEmail': {
-          'emailAddress': person.contact && person.contact.email || '',
-          'optOut': 0
-        }
+      'api_idCstm': person.id,
+      'description': person.notes || 'No description!',
+      'firstName': '',
+      'lastName': '',
+      'state': {
+        'id': 1
+      },
+      'mobilePhone': person.contact && person.contact.phone || '',
+      'website': person.url || '',
+      'primaryEmail': {
+        'emailAddress': person.contact && person.contact.email || '',
+        'optOut': 0
       }
     }
-  }
+  };
   if(person && person.name){
     var splitName = person.name.split(" ");
     if(splitName.length == 1){
-      lead.data.items['firstName'] = splitName[0];
-      lead.data.items['firstName'] = '.';
+      lead.data['firstName'] = splitName[0];
+      lead.data['lastName'] = ' ';
+      console.log(person);
     } else {
-      lead.data.items['firstName'] = splitName[0];
-      lead.data.items['lastName'] = splitName[1];
+      lead.data['firstName'] = splitName[0];
+      lead.data['lastName'] = splitName[1];
     }
   }
-  var str = JSON.stringify(lead, null, 2)
-  console.log(str);
-  request({
+  /*request({
     url: 'http://bd.techatnyu.org/app/index.php/leads/contact/api/create/',
     method: 'POST',
     form: lead,
@@ -48,7 +45,7 @@ var peopleToLeads = function(person){
     }
   }).then(function(returnBody) {
     console.log(returnBody);
-  });
+  });*/
 }
 
 request({
@@ -69,7 +66,6 @@ request({
   }
   ZURMO_sessionId = data.sessionId;
   ZURMO_token = data.token;
-  console.log(ZURMO_sessionId, ZURMO_token)
 
   return request({
     url: 'https://api.tnyu.org/v2/people', 
@@ -81,6 +77,5 @@ request({
   });
 }).then(function(peopleBody){
   var people = JSON.parse(peopleBody).data;
-  peopleToLeads(people[0]);
-  //people.forEach(peopleToLeads);
+  people.forEach(peopleToLeads);
 })
