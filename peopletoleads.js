@@ -11,10 +11,15 @@ var peopleToLeads = function(person){
         'description': person.notes || '',
         'firstName': '',
         'lastName': '',
-        'state': 'New',
+        'state': {
+          'id': 2
+        },
         'mobilePhone': person.contact && person.contact.phone || '',
         'website': person.url || '',
-        'primaryEmail': person.contact && person.contact.email || ''
+        'primaryEmail': {
+          'emailAddress': person.contact && person.contact.email || '',
+          'optOut': 0
+        }
       }
     }
   }
@@ -28,7 +33,8 @@ var peopleToLeads = function(person){
       lead.data.items['lastName'] = splitName[1];
     }
   }
-  console.log(lead);
+  var str = JSON.stringify(lead, null, 2)
+  console.log(str);
   request({
     url: 'http://bd.techatnyu.org/app/index.php/leads/contact/api/create/',
     method: 'POST',
@@ -63,6 +69,7 @@ request({
   }
   ZURMO_sessionId = data.sessionId;
   ZURMO_token = data.token;
+  console.log(ZURMO_sessionId, ZURMO_token)
 
   return request({
     url: 'https://api.tnyu.org/v2/people', 
