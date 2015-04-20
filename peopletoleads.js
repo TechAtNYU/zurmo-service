@@ -2,6 +2,7 @@ var request = require('request-promise');
 
 var ZURMO_sessionId = '';
 var ZURMO_token = '';
+var lastNameMissing = [];
 
 var peopleToLeads = function(person){
   var lead = {
@@ -23,16 +24,14 @@ var peopleToLeads = function(person){
   };
   if(person && person.name){
     var splitName = person.name.split(" ");
-    if(splitName.length == 1){
-      lead.data['firstName'] = splitName[0];
-      lead.data['lastName'] = ' ';
-      console.log(person);
+    if(splitName.length == 1) {
+      lastNameMissing.push(lead);
     } else {
       lead.data['firstName'] = splitName[0];
       lead.data['lastName'] = splitName[1];
     }
   }
-  /*request({
+  request({
     url: 'http://bd.techatnyu.org/app/index.php/leads/contact/api/create/',
     method: 'POST',
     form: lead,
@@ -45,7 +44,7 @@ var peopleToLeads = function(person){
     }
   }).then(function(returnBody) {
     console.log(returnBody);
-  });*/
+  });
 }
 
 request({
